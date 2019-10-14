@@ -1,5 +1,7 @@
-# Sample-six-organization
-Its a simple six organization and orderer peer in a hyperledger fabric framework
-All the hyperledger fabric doc has been edited to my config,to develop a network with six organization.
-Docker compose file is needed to be oriented 
-Next step is to spun up the network
+## Build Your First Network (BYFN)
+
+The directions for using this are documented in the Hyperledger Fabric
+["Build Your First Network"](http://hyperledger-fabric.readthedocs.io/en/latest/build_network.html) tutorial.
+
+*NOTE:* After navigating to the documentation, choose the documentation version that matches your version of Fabric
+

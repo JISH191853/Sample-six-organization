@@ -1,0 +1,179 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+volumes:
+  orderer.papernet.com:
+  peer0.MC.example.com:
+  peer1.MC.example.com:
+  peer0.DB.example.com:
+  peer1.DB.example.com:
+  peer0.BF.example.com:
+  peer1.BF.example.com:
+  peer0.BH.example.com:
+  peer1.BH.example.com:
+  peer0.HM.example.com:
+  peer1.HM.example.com:
+  peer0.RM.example.com:
+  peer1.RM.example.com:
+  
+  
+
+networks:
+  byfn:
+
+services:
+
+  orderer.papernet.com:
+    extends:
+      file:   base/docker-compose-base.yaml
+      service: orderer.papernet.com
+    container_name: papernet.example.com
+    networks:
+      - byfn
+
+  peer0.MC.example.com:
+    container_name: peer0.MC.example.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.MC.example.com
+    networks:
+      - byfn
+
+  peer1.MC.example.com:
+    container_name: peer1.MC.example.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.MC.example.com
+    networks:
+      - byfn
+
+  peer0.DB.example.com:
+    container_name: peer0.DB.example.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.DB.example.com
+    networks:
+      - byfn
+
+  peer1.DB.example.com:
+    container_name: peer1.DB.example.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.DB.example.com
+    networks:
+      - byfn
+
+  peer0.BF.example.com:
+    container_name: peer0.BF.example.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.BF.example.com
+    networks:
+      - byfn
+
+  peer1.BF.example.com:
+    container_name: peer1.BF.example.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.BF.example.com
+    networks:
+      - byfn
+
+  
+  peer0.BH.example.com:
+    container_name: peer0.BH.example.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.BH.example.com
+    networks:
+      - byfn
+
+  peer1.BH.example.com:
+    container_name: peer1.BH.example.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.BH.example.com
+    networks:
+      - byfn
+
+
+  peer0.HM.example.com:
+    container_name: peer0.HM.example.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.HM.example.com
+    networks:
+      - byfn
+
+  peer1.HM.example.com:
+    container_name: peer1.HM.example.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.HM.example.com
+    networks:
+      - byfn
+
+  peer0.RM.example.com:
+    container_name: peer0.RM.example.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.RM.example.com
+    networks:
+      - byfn
+
+  peer1.RM.example.com:
+    container_name: peer1.RM.example.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.RM.example.com
+    networks:
+      - byfn
+    
+    
+
+  cli:
+    container_name: cli
+    image: hyperledger/fabric-tools:$IMAGE_TAG
+    tty: true
+    stdin_open: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      #- CORE_LOGGING_LEVEL=DEBUG
+      - CORE_LOGGING_LEVEL=INFO
+      - CORE_PEER_ID=cli
+      - CORE_PEER_ADDRESS=peer0.MC.example.com:7051
+      - CORE_PEER_LOCALMSPID=MagnetoCorpMSP
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganization/MC.example.com/peers/peer0.MC.example.com/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganization/MC.example.com/peers/peer1.MC.example.com/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganization/MC.example.com/peers/peer.MC.example.com/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganization/MC.example.com/users/AdmMCexample.com/msp
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: /bin/bash
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./../chaincode/:/opt/gopath/src/github.com/chaincode
+        - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+        - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
+        - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+    depends_on:
+      - orderer.papernet.com
+      - peer0.MC.example.com
+      - peer1.MC.example.com
+      - peer0.DB.example.com
+      - peer1.DB.example.com
+      - peer0.BF.example.com
+      - peer1.BF.example.com
+      - peer0.BH.example.com
+      - peer1.BH.example.com
+      - peer0.HM.example.com
+      - peer1.HM.example.com
+      - peer0.RM.example.com
+      - peer1.RM.example.com
+    networks:
+      - byfn
